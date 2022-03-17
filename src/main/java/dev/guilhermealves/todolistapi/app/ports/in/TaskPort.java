@@ -2,10 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
-package dev.guilhermealves.todolistapi.ports.in;
+package dev.guilhermealves.todolistapi.app.ports.in;
 
-import dev.guilhermealves.todolistapi.domain.entities.Task;
-import dev.guilhermealves.todolistapi.domain.entities.User;
+import dev.guilhermealves.todolistapi.app.domain.entities.Task;
+import dev.guilhermealves.todolistapi.app.domain.entities.User;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 
@@ -17,7 +17,8 @@ import org.springframework.http.ResponseEntity;
 public interface TaskPort {
     public ResponseEntity<Task> create(Task task);
     public ResponseEntity<Task> find(String id);
-    public ResponseEntity<List<Task>> list(User user);
+    public ResponseEntity<List<Task>> listByTitle(String title);
+    public ResponseEntity<List<Task>> listByUser(String userId);
     public ResponseEntity<Task> update(String id, Task task);
     public ResponseEntity<?> delete(String id);
 }

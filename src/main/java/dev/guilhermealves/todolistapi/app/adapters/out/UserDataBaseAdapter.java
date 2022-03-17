@@ -2,11 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package dev.guilhermealves.todolistapi.adapters.out;
+package dev.guilhermealves.todolistapi.app.adapters.out;
 
-import dev.guilhermealves.todolistapi.domain.entities.User;
-import dev.guilhermealves.todolistapi.domain.repository.UserRepository;
-import dev.guilhermealves.todolistapi.ports.out.DataBaseIntegration;
+import dev.guilhermealves.todolistapi.app.domain.entities.User;
+import dev.guilhermealves.todolistapi.app.domain.repository.UserRepository;
+import dev.guilhermealves.todolistapi.app.ports.out.DataBaseIntegration;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -34,22 +34,22 @@ public class UserDataBaseAdapter implements DataBaseIntegration<User, UUID> {
 
     @Override
     public Optional<User> find(UUID id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return repository.findById(id);
     }
 
     @Override
     public List<User> list() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return repository.findAll();
     }
 
     @Override
     public List<User> list(Example<User> example) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return repository.findAll(example);
     }
 
     @Override
     public void delete(UUID id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        repository.deleteById(id);
     }
     
 }

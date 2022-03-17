@@ -2,9 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package dev.guilhermealves.todolistapi.domain.entities;
+package dev.guilhermealves.todolistapi.app.domain.entities;
 
-import dev.guilhermealves.todolistapi.domain.enums.Role;
+import dev.guilhermealves.todolistapi.app.domain.enums.Role;
 import java.util.UUID;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -25,7 +25,7 @@ public class User {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    private UUID idUser;
     
     private String username;
     
@@ -33,16 +33,4 @@ public class User {
     
     private Role role;
     
-    public User(UUID id, String username, String password, Role role){
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.role = role;
-    }
-    
-    public User(String username, String password, Role role){
-        this.username = username;
-        this.password = password;
-        this.role = role;
-    }
 }

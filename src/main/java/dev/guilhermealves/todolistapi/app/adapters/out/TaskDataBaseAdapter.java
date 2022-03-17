@@ -2,11 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package dev.guilhermealves.todolistapi.adapters.out;
+package dev.guilhermealves.todolistapi.app.adapters.out;
 
-import dev.guilhermealves.todolistapi.domain.entities.Task;
-import dev.guilhermealves.todolistapi.domain.repository.TaskRepository;
-import dev.guilhermealves.todolistapi.ports.out.DataBaseIntegration;
+import dev.guilhermealves.todolistapi.app.domain.entities.Task;
+import dev.guilhermealves.todolistapi.app.domain.repository.TaskRepository;
+import dev.guilhermealves.todolistapi.app.ports.out.DataBaseIntegration;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

@@ -2,12 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package dev.guilhermealves.todolistapi.adapters.in;
+package dev.guilhermealves.todolistapi.app.adapters.in;
 
-import dev.guilhermealves.todolistapi.domain.entities.Task;
-import dev.guilhermealves.todolistapi.domain.entities.User;
-import dev.guilhermealves.todolistapi.domain.entities.core.TaskCore;
-import dev.guilhermealves.todolistapi.ports.in.TaskPort;
+import dev.guilhermealves.todolistapi.app.domain.entities.Task;
+import dev.guilhermealves.todolistapi.app.domain.entities.User;
+import dev.guilhermealves.todolistapi.app.domain.entities.core.TaskCore;
+import dev.guilhermealves.todolistapi.app.ports.in.TaskPort;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -48,12 +48,19 @@ public class TaskControllerAdapter implements TaskPort {
         Task t = core.find(id);
         return new ResponseEntity<>(t, HttpStatus.OK);
     }
-
+    
     @Override
     @GetMapping
-    public ResponseEntity<List<Task>> list(@RequestParam(required = false) @RequestBody @Valid User user) {
-        List<Task> t = core.list(user);
-        return new ResponseEntity<>(t, HttpStatus.OK);
+    public ResponseEntity<List<Task>> listByTitle(@RequestParam(required = false) String title) {
+        List<Task> t = core.listByTitle(title);
+        return new ResponseEntity<>(t, HttpStatus.OK); 
+    }
+
+    @Override
+    @GetMapping("/user/{id}")
+    public ResponseEntity<List<Task>> listByUser(@PathVariable String id) {
+        List<Task> t = core.listByUser(id);
+        return new ResponseEntity<>(t, HttpStatus.OK); 
     }
 
     @Override
@@ -68,6 +75,6 @@ public class TaskControllerAdapter implements TaskPort {
     public ResponseEntity<?> delete(@PathVariable String id) {
         core.delete(id);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
-    }
+    }    
     
 }

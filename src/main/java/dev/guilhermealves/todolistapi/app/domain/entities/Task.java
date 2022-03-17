@@ -2,15 +2,17 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package dev.guilhermealves.todolistapi.domain.entities;
+package dev.guilhermealves.todolistapi.app.domain.entities;
 
-import dev.guilhermealves.todolistapi.domain.enums.Status;
+import dev.guilhermealves.todolistapi.app.domain.enums.Status;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,9 +28,11 @@ import lombok.Setter;
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    private UUID idTask;
     
-    private UUID userId;
+    @ManyToOne
+    @JoinColumn(name="idUser")
+    private User user;
     
     private LocalDateTime inclusionDate;
     
