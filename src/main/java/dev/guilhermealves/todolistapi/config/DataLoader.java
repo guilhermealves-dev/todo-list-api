@@ -4,60 +4,66 @@
  */
 package dev.guilhermealves.todolistapi.config;
 
+import dev.guilhermealves.todolistapi.app.domain.entities.Role;
 import dev.guilhermealves.todolistapi.app.domain.entities.Task;
 import dev.guilhermealves.todolistapi.app.domain.entities.User;
-import dev.guilhermealves.todolistapi.app.domain.enums.Role;
 import dev.guilhermealves.todolistapi.app.domain.enums.Status;
 import dev.guilhermealves.todolistapi.app.ports.out.DataBaseIntegration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-import lombok.RequiredArgsConstructor;
+import javax.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  *
  * @author Guilherme
  */
 
-@Component
-@RequiredArgsConstructor
-public class DataLoader implements ApplicationRunner {
+@Configuration
+public class DataLoader {
     
     @Qualifier("user")
-    private final DataBaseIntegration dataBaseIntegration;
+    private DataBaseIntegration dataBaseIntegration;
     
+    @Autowired
     @Qualifier("task")
-    private final DataBaseIntegration taskDataBaseIntegration;
+    private DataBaseIntegration taskDataBaseIntegration;
+    
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-    @Override
-    public void run(ApplicationArguments args) throws Exception {
-                 
+    @PostConstruct
+    public void run() throws Exception {
+        createUsersTest();
+        createTaskTest();
+    }
+
+    private void createUsersTest(){
+
         User user1 = new User();
         user1.setUsername("guilherme");
-        user1.setPassword("123");
+        user1.setPassword(passwordEncoder.encode("123"));
         user1.setRole(Role.USER);
         user1.setIdUser(UUID.fromString("f4eff9cf-e496-427c-9629-bd35edaa2190"));
         dataBaseIntegration.save(user1);
-        
+
         User user2 = new User();
         user2.setUsername("telma");
-        user2.setPassword("123");
+        user2.setPassword(passwordEncoder.encode("123"));
         user2.setRole(Role.ADMIN);
         user2.setIdUser(UUID.fromString("bac239f8-4d1a-4f00-b737-36451de7cc84"));
         dataBaseIntegration.save(user2);
-        
+
         User user3 = new User();
         user3.setUsername("gabriel");
-        user3.setPassword("123");
+        user3.setPassword(passwordEncoder.encode("123"));
         user3.setRole(Role.ADMIN);
         user3.setIdUser(UUID.fromString("203b6558-ed6e-4360-965f-418264abc58f"));
-        dataBaseIntegration.save(user3);     
-
-        createTaskTest();
+        dataBaseIntegration.save(user3); 
     }
     
     private void createTaskTest(){

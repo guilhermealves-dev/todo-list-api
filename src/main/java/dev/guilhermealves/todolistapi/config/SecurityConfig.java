@@ -4,12 +4,10 @@
  */
 package dev.guilhermealves.todolistapi.config;
 
+import dev.guilhermealves.todolistapi.app.domain.entities.Role;
 import dev.guilhermealves.todolistapi.app.domain.entities.User;
-import dev.guilhermealves.todolistapi.app.domain.enums.Role;
 import dev.guilhermealves.todolistapi.app.ports.out.DataBaseIntegration;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +16,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
@@ -31,11 +29,11 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 @EnableWebSecurity
 @EnableAuthorizationServer
 @EnableResourceServer
-@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     
+    @Autowired
     @Qualifier("user")
-    private final DataBaseIntegration dataBaseIntegration;
+    private DataBaseIntegration dataBaseIntegration;
     
     @Bean
     @Override
@@ -50,7 +48,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 
         for(User user : users){
             String role = user.getRole() == Role.ADMIN ? "ADMIN" : "USER";
-            auth.inMemoryAuthentication().withUser(user.getUsername()).password(user.getPassword()).roles(role);
+            auth.inMemoryAuthentication()
+				.withUser(user.getUsername())
+				.password(user.getPassword())
+				.roles(role);
         }
         
 //        auth.inMemoryAuthentication().withUser("guilherme").password("123").roles("ADMIN");
@@ -58,13 +59,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web
-            .ignoring()
+        web.ignoring()
             .antMatchers("/h2/**");
     }
     
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 }
