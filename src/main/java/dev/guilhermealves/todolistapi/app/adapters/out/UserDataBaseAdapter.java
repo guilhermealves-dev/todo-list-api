@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
@@ -22,10 +23,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Qualifier("user")
-@RequiredArgsConstructor
 public class UserDataBaseAdapter implements DataBaseIntegration<User, UUID> {
     
-    private final UserRepository repository;
+    @Autowired
+    private UserRepository repository;
 
     @Override
     public User save(User user) {

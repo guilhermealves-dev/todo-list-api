@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Example;
@@ -24,10 +25,10 @@ import org.springframework.stereotype.Service;
 @Service
 @Primary
 @Qualifier("task")
-@RequiredArgsConstructor
 public class TaskDataBaseAdapter implements DataBaseIntegration<Task, UUID> {
 
-    private final TaskRepository repository;
+    @Autowired
+    private TaskRepository repository;
 
     @Override
     public Task save(Task t) {

@@ -4,6 +4,7 @@
  */
 package dev.guilhermealves.todolistapi.app.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import dev.guilhermealves.todolistapi.app.domain.enums.Status;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -25,6 +26,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
+@JsonIgnoreProperties(value = {"user"})
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

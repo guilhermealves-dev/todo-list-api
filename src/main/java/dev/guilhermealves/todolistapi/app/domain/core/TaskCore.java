@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package dev.guilhermealves.todolistapi.app.domain.entities.core;
+package dev.guilhermealves.todolistapi.app.domain.core;
 
 import dev.guilhermealves.todolistapi.app.domain.entities.Task;
 import dev.guilhermealves.todolistapi.app.domain.entities.User;
@@ -29,15 +29,15 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class TaskCore {
     
+    @Autowired
     @Qualifier("task")
-    private final DataBaseIntegration taskDataBaseIntegration;
+    private DataBaseIntegration taskDataBaseIntegration;
     
     @Autowired
     @Qualifier("user")
-    private final DataBaseIntegration userDataBaseIntegration;
+    private DataBaseIntegration userDataBaseIntegration;
     
     public Task create(Task task){
         try{
