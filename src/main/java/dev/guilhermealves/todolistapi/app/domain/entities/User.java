@@ -5,10 +5,9 @@
 package dev.guilhermealves.todolistapi.app.domain.entities;
 
 import dev.guilhermealves.todolistapi.app.domain.enums.Role;
+import java.io.Serializable;
 import java.util.UUID;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,7 +20,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class User {
+public class User implements Serializable{
     
     @Id
     private UUID idUser;

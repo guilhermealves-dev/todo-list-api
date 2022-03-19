@@ -6,6 +6,7 @@ package dev.guilhermealves.todolistapi.app.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import dev.guilhermealves.todolistapi.app.domain.enums.Status;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import javax.persistence.Entity;
@@ -27,7 +28,7 @@ import lombok.Setter;
 @Getter
 @Setter
 //@JsonIgnoreProperties(value = {"user"})
-public class Task implements Comparable<Task> {
+public class Task implements Comparable<Task>, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID idTask;

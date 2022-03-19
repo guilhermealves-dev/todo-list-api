@@ -5,13 +5,10 @@
 package dev.guilhermealves.todolistapi.app.adapters.in;
 
 import dev.guilhermealves.todolistapi.app.domain.entities.Task;
-import dev.guilhermealves.todolistapi.app.domain.entities.User;
 import dev.guilhermealves.todolistapi.app.domain.core.TaskCore;
-import dev.guilhermealves.todolistapi.app.domain.enums.Status;
 import dev.guilhermealves.todolistapi.app.ports.in.TaskPort;
 import java.util.List;
 import javax.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -77,6 +74,6 @@ public class TaskControllerAdapter implements TaskPort {
     public ResponseEntity<?> delete(@PathVariable String id) {
         core.delete(id);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
-    }    
+    }
     
 }

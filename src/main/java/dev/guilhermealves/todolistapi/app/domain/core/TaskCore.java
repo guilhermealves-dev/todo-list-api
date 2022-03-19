@@ -19,6 +19,8 @@ import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Example;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -51,6 +53,7 @@ public class TaskCore {
             task.setInclusionDate(LocalDateTime.now());
             task.setUser(user.get());
             Task newTask = (Task) taskDataBaseIntegration.save(task);
+            clearCache();
             return clearSensitiveDataFromTask(newTask);
             
         }catch(Throwable t){
@@ -76,8 +79,11 @@ public class TaskCore {
         }
     }
     
+    @Cacheable("list")
     public List<Task> list(String status){
-        try{            
+        System.out.println("---------------------------------- sem cache ---------------------------------- ");
+
+        try{
             if(Objects.isNull(status)){
                 List<Task> tasks = taskDataBaseIntegration.list();
 
@@ -162,7 +168,8 @@ public class TaskCore {
                 taskUpdate.setModificationDate(LocalDateTime.now());
             }
             
-            taskDataBaseIntegration.save(taskUpdate);           
+            taskDataBaseIntegration.save(taskUpdate);
+            clearCache();
             return clearSensitiveDataFromTask(taskUpdate);
         }
         catch(Throwable t){
@@ -175,6 +182,7 @@ public class TaskCore {
         try{
             UUID uuid = UUID.fromString(id);
             taskDataBaseIntegration.delete(uuid);
+            clearCache();
         }
         catch(Throwable t){
             throw new CustomException(t);
@@ -193,5 +201,10 @@ public class TaskCore {
         }
         
         return tasks;
+    }
+    
+    @CacheEvict("list")
+    private void clearCache(){
+        System.out.println("Limpando cache");
     }
 }
