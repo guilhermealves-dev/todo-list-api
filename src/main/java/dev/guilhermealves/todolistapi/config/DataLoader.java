@@ -4,7 +4,7 @@
  */
 package dev.guilhermealves.todolistapi.config;
 
-import dev.guilhermealves.todolistapi.app.domain.entities.Role;
+import dev.guilhermealves.todolistapi.app.domain.enums.Role;
 import dev.guilhermealves.todolistapi.app.domain.entities.Task;
 import dev.guilhermealves.todolistapi.app.domain.entities.User;
 import dev.guilhermealves.todolistapi.app.domain.enums.Status;
@@ -25,7 +25,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class DataLoader {
-    
+    @Autowired
     @Qualifier("user")
     private DataBaseIntegration dataBaseIntegration;
     
@@ -73,7 +73,7 @@ public class DataLoader {
         t1.setUser(users.get(0));
         t1.setTitle("Comprar leite");
         t1.setDescription("Comprar leita desnatado para a dieta");
-        t1.setStatus(Status.PENDING);
+        t1.setStatus(Status.COMPLETED);
         t1.setInclusionDate(LocalDateTime.now());
                 
         taskDataBaseIntegration.save(t1);
@@ -82,7 +82,7 @@ public class DataLoader {
         t2.setUser(users.get(0));
         t2.setTitle("Comprar frutas");
         t2.setDescription("Comprar frutas na feira para a dieta");
-        t2.setStatus(Status.COMPLETED);
+        t2.setStatus(Status.PENDING);
         t2.setInclusionDate(LocalDateTime.now().minusDays(2));
         t2.setModificationDate(LocalDateTime.now().minusDays(1));
         taskDataBaseIntegration.save(t2);

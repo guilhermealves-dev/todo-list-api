@@ -6,15 +6,16 @@ package dev.guilhermealves.todolistapi.app.domain.core;
 
 import dev.guilhermealves.todolistapi.app.domain.entities.Task;
 import dev.guilhermealves.todolistapi.app.domain.entities.User;
+import dev.guilhermealves.todolistapi.app.domain.enums.Status;
 import dev.guilhermealves.todolistapi.app.domain.exception.CustomException;
 import dev.guilhermealves.todolistapi.app.domain.exception.TaskException;
 import dev.guilhermealves.todolistapi.app.ports.out.DataBaseIntegration;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -41,7 +42,6 @@ public class TaskCore {
     
     public Task create(Task task){
         try{
-            
             Optional<User> user = userDataBaseIntegration.find(task.getUser().getIdUser());
 
             if(!user.isPresent()){
@@ -51,7 +51,7 @@ public class TaskCore {
             task.setInclusionDate(LocalDateTime.now());
             task.setUser(user.get());
             Task newTask = (Task) taskDataBaseIntegration.save(task);
-            return newTask;
+            return clearSensitiveDataFromTask(newTask);
             
         }catch(Throwable t){
             log.error("Error create task: ", t);
@@ -68,7 +68,7 @@ public class TaskCore {
                 throw new TaskException("Task not found", HttpStatus.BAD_REQUEST);
             }
             
-            return task.get();
+            return clearSensitiveDataFromTask(task.get());
             
         }catch(Throwable t){
             log.error("Error find task: ", t);
@@ -76,32 +76,38 @@ public class TaskCore {
         }
     }
     
-    public List<Task> listByTitle(String title){
-        try{
-            if(Objects.isNull(title)){
+    public List<Task> list(String status){
+        try{            
+            if(Objects.isNull(status)){
                 List<Task> tasks = taskDataBaseIntegration.list();
 
                 if(tasks.isEmpty()){
                     throw new TaskException("No tasks registered", HttpStatus.BAD_REQUEST);
                 }
-
-                return tasks;
+                
+                Collections.sort(tasks);                        
+                return clearSensitiveDataFromTasks(tasks);
+            }
+            
+            Status statusFilter = Status.fromString(status);
+            if(Objects.isNull(statusFilter)){
+                throw new TaskException("Status not found", HttpStatus.BAD_REQUEST);
             }
             
             Task taskFilter = new Task();
-            taskFilter.setTitle(title);
+            taskFilter.setStatus(statusFilter);
 
             Example<Task> ex = Example.of(taskFilter);
             List<Task> tasks = taskDataBaseIntegration.list(ex);
 
             if(tasks.isEmpty()){
-                throw new TaskException("No tasks registered with title "+ title, HttpStatus.BAD_REQUEST);
+                throw new TaskException("No tasks registered with status "+ status.toString(), HttpStatus.BAD_REQUEST);
             }
 
-            return tasks;
+            return clearSensitiveDataFromTasks(tasks);
 
         }catch(Throwable t){
-            log.error("Error list tasks by title: {}", t);
+            log.error("Error list tasks by status: {}", t);
             throw new CustomException(t);
         }
     }
@@ -124,7 +130,8 @@ public class TaskCore {
                 throw new TaskException("No tasks registered by user "+ user.get().getUsername(), HttpStatus.BAD_REQUEST);
             }
 
-            return tasks;
+            Collections.sort(tasks);
+            return clearSensitiveDataFromTasks(tasks);
 
         }catch(Throwable t){
             log.error("Error list tasks by user: {}", t);
@@ -141,22 +148,22 @@ public class TaskCore {
                 throw new TaskException("Task not found", HttpStatus.UNPROCESSABLE_ENTITY);
             }
             
-            Task t = opTask.get();
+            Task taskUpdate = opTask.get();
             if(!Objects.isNull(task.getTitle())){
-                t.setTitle(task.getTitle());
+                taskUpdate.setTitle(task.getTitle());
             }
             
             if(!Objects.isNull(task.getDescription())){
-                t.setDescription(task.getDescription());
+                taskUpdate.setDescription(task.getDescription());
             }
             
-            if(!Objects.isNull(task.getStatus()) && !t.getStatus().equals(task.getStatus())){
-                t.setStatus(task.getStatus());
-                t.setModificationDate(LocalDateTime.now());
+            if(!Objects.isNull(task.getStatus()) && !taskUpdate.getStatus().equals(task.getStatus())){
+                taskUpdate.setStatus(task.getStatus());
+                taskUpdate.setModificationDate(LocalDateTime.now());
             }
             
-            taskDataBaseIntegration.save(t);           
-            return t;
+            taskDataBaseIntegration.save(taskUpdate);           
+            return clearSensitiveDataFromTask(taskUpdate);
         }
         catch(Throwable t){
             log.error("Error update task: {}", t);
@@ -172,5 +179,19 @@ public class TaskCore {
         catch(Throwable t){
             throw new CustomException(t);
         }
+    }
+    
+    private Task clearSensitiveDataFromTask(Task task){
+        task.getUser().setPassword(null);
+        
+        return task;
+    }
+    
+    private List<Task> clearSensitiveDataFromTasks(List<Task> tasks){
+        for(Task task : tasks){
+            clearSensitiveDataFromTask(task);
+        }
+        
+        return tasks;
     }
 }

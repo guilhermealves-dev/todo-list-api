@@ -7,6 +7,7 @@ package dev.guilhermealves.todolistapi.app.adapters.in;
 import dev.guilhermealves.todolistapi.app.domain.entities.Task;
 import dev.guilhermealves.todolistapi.app.domain.entities.User;
 import dev.guilhermealves.todolistapi.app.domain.core.TaskCore;
+import dev.guilhermealves.todolistapi.app.domain.enums.Status;
 import dev.guilhermealves.todolistapi.app.ports.in.TaskPort;
 import java.util.List;
 import javax.validation.Valid;
@@ -52,8 +53,8 @@ public class TaskControllerAdapter implements TaskPort {
     
     @Override
     @GetMapping
-    public ResponseEntity<List<Task>> listByTitle(@RequestParam(required = false) String title) {
-        List<Task> t = core.listByTitle(title);
+    public ResponseEntity<List<Task>> list(@RequestParam(required = false) String status) {
+        List<Task> t = core.list(status);
         return new ResponseEntity<>(t, HttpStatus.OK); 
     }
 

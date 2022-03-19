@@ -26,8 +26,8 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@JsonIgnoreProperties(value = {"user"})
-public class Task {
+//@JsonIgnoreProperties(value = {"user"})
+public class Task implements Comparable<Task> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID idTask;
@@ -46,4 +46,9 @@ public class Task {
     private String description;
     
     private Status status;
+
+    @Override
+    public int compareTo(Task o) {
+        return this.status.compareTo(o.status);
+    }
 }
