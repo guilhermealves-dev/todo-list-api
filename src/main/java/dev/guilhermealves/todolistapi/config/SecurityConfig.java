@@ -47,7 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception{
         
-        List<User> users = dataBaseIntegration.list();
+        List<User> users = dataBaseIntegration.findAll();
                 
         for(User user : users){
             String role = user.getRole() == Role.ADMIN ? "ADMIN" : "USER";

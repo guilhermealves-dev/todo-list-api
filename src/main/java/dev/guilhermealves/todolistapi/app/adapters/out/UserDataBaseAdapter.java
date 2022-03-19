@@ -34,22 +34,22 @@ public class UserDataBaseAdapter implements DataBaseIntegration<User, UUID> {
     }
 
     @Override
-    public Optional<User> find(UUID id) {
+    public Optional<User> findById(UUID id) {
         return repository.findById(id);
     }
 
     @Override
-    public List<User> list() {
+    public List<User> findAll() {
         return repository.findAll();
     }
 
     @Override
-    public List<User> list(Example<User> example) {
+    public List<User> findAll(Example<User> example) {
         return repository.findAll(example);
     }
 
     @Override
-    public void delete(UUID id) {
+    public void deleteById(UUID id) {
         repository.deleteById(id);
     }
     

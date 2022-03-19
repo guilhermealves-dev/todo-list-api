@@ -44,7 +44,7 @@ public class TaskCore {
     
     public Task create(Task task){
         try{
-            Optional<User> user = userDataBaseIntegration.find(task.getUser().getIdUser());
+            Optional<User> user = userDataBaseIntegration.findById(task.getUser().getIdUser());
 
             if(!user.isPresent()){
                 throw new TaskException("User not found", HttpStatus.BAD_REQUEST);
@@ -53,7 +53,6 @@ public class TaskCore {
             task.setInclusionDate(LocalDateTime.now());
             task.setUser(user.get());
             Task newTask = (Task) taskDataBaseIntegration.save(task);
-            clearCache();
             return clearSensitiveDataFromTask(newTask);
             
         }catch(Throwable t){
@@ -65,7 +64,7 @@ public class TaskCore {
     public Task find(String id){
         try{
             UUID uuid = UUID.fromString(id);
-            Optional<Task> task = taskDataBaseIntegration.find(uuid);
+            Optional<Task> task = taskDataBaseIntegration.findById(uuid);
             
             if(!task.isPresent()){
                 throw new TaskException("Task not found", HttpStatus.BAD_REQUEST);
@@ -79,13 +78,10 @@ public class TaskCore {
         }
     }
     
-    @Cacheable("list")
     public List<Task> list(String status){
-        System.out.println("---------------------------------- sem cache ---------------------------------- ");
-
         try{
             if(Objects.isNull(status)){
-                List<Task> tasks = taskDataBaseIntegration.list();
+                List<Task> tasks = taskDataBaseIntegration.findAll();
 
                 if(tasks.isEmpty()){
                     throw new TaskException("No tasks registered", HttpStatus.BAD_REQUEST);
@@ -104,7 +100,7 @@ public class TaskCore {
             taskFilter.setStatus(statusFilter);
 
             Example<Task> ex = Example.of(taskFilter);
-            List<Task> tasks = taskDataBaseIntegration.list(ex);
+            List<Task> tasks = taskDataBaseIntegration.findAll(ex);
 
             if(tasks.isEmpty()){
                 throw new TaskException("No tasks registered with status "+ status.toString(), HttpStatus.BAD_REQUEST);
@@ -121,7 +117,7 @@ public class TaskCore {
     public List<Task> listByUser(String userId){
         try{
             UUID uuid = UUID.fromString(userId);
-            Optional<User> user = userDataBaseIntegration.find(uuid);
+            Optional<User> user = userDataBaseIntegration.findById(uuid);
             if(!user.isPresent()){
                 throw new TaskException("User not found", HttpStatus.BAD_REQUEST);
             }
@@ -130,7 +126,7 @@ public class TaskCore {
             taskFilter.setUser(user.get());
 
             Example<Task> ex = Example.of(taskFilter);
-            List<Task> tasks = taskDataBaseIntegration.list(ex);
+            List<Task> tasks = taskDataBaseIntegration.findAll(ex);
 
             if(tasks.isEmpty()){
                 throw new TaskException("No tasks registered by user "+ user.get().getUsername(), HttpStatus.BAD_REQUEST);
@@ -148,7 +144,7 @@ public class TaskCore {
     public Task update(String id, Task task){
         try{
             UUID uuid = UUID.fromString(id);
-            Optional<Task> opTask = taskDataBaseIntegration.find(uuid);
+            Optional<Task> opTask = taskDataBaseIntegration.findById(uuid);
             
             if(!opTask.isPresent()){
                 throw new TaskException("Task not found", HttpStatus.UNPROCESSABLE_ENTITY);
@@ -169,7 +165,6 @@ public class TaskCore {
             }
             
             taskDataBaseIntegration.save(taskUpdate);
-            clearCache();
             return clearSensitiveDataFromTask(taskUpdate);
         }
         catch(Throwable t){
@@ -181,8 +176,7 @@ public class TaskCore {
     public void delete(final String id){
         try{
             UUID uuid = UUID.fromString(id);
-            taskDataBaseIntegration.delete(uuid);
-            clearCache();
+            taskDataBaseIntegration.deleteById(uuid);
         }
         catch(Throwable t){
             throw new CustomException(t);
@@ -201,10 +195,5 @@ public class TaskCore {
         }
         
         return tasks;
-    }
-    
-    @CacheEvict("list")
-    private void clearCache(){
-        System.out.println("Limpando cache");
     }
 }

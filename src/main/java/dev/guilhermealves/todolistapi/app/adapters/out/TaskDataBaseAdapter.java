@@ -36,22 +36,22 @@ public class TaskDataBaseAdapter implements DataBaseIntegration<Task, UUID> {
     }
 
     @Override
-    public Optional<Task> find(UUID id) {
+    public Optional<Task> findById(UUID id) {
         return repository.findById(id);
     }
 
     @Override
-    public List<Task> list() {
+    public List<Task> findAll() {
         return repository.findAll();
     }
 
     @Override
-    public List<Task> list(Example<Task> example) {
+    public List<Task> findAll(Example<Task> example) {
         return repository.findAll(example);
     }
 
     @Override
-    public void delete(UUID id) {
+    public void deleteById(UUID id) {
         repository.deleteById(id);
     }
     

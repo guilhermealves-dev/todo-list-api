@@ -67,7 +67,7 @@ public class DataLoader {
     }
     
     private void createTaskTest(){
-        List<User> users = dataBaseIntegration.list();
+        List<User> users = dataBaseIntegration.findAll();
         
         Task t1 = new Task();
         t1.setUser(users.get(0));
