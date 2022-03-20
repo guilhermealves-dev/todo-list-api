@@ -6,24 +6,23 @@ package dev.guilhermealves.todolistapi.app.domain.core;
 
 import dev.guilhermealves.todolistapi.app.domain.entities.Task;
 import dev.guilhermealves.todolistapi.app.domain.entities.User;
+import dev.guilhermealves.todolistapi.app.domain.enums.Role;
 import dev.guilhermealves.todolistapi.app.domain.enums.Status;
 import dev.guilhermealves.todolistapi.app.domain.exception.CustomException;
 import dev.guilhermealves.todolistapi.app.domain.exception.TaskException;
+import dev.guilhermealves.todolistapi.app.domain.mapper.TaskMapper;
+import dev.guilhermealves.todolistapi.app.domain.model.api.TaskModel;
 import dev.guilhermealves.todolistapi.app.ports.out.DataBaseIntegration;
-import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Example;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.*;
 
 /**
  *
@@ -33,167 +32,207 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class TaskCore {
-    
+
     @Autowired
     @Qualifier("task")
     private DataBaseIntegration taskDataBaseIntegration;
-    
-    @Autowired
-    @Qualifier("user")
-    private DataBaseIntegration userDataBaseIntegration;
-    
-    public Task create(Task task){
-        try{
-            Optional<User> user = userDataBaseIntegration.findById(task.getUser().getIdUser());
 
-            if(!user.isPresent()){
-                throw new TaskException("User not found", HttpStatus.BAD_REQUEST);
-            }
-            
-            task.setInclusionDate(LocalDateTime.now());
-            task.setUser(user.get());
+    @Autowired
+    private SecurityCore securityCore;
+
+    @Autowired
+    private TaskMapper taskMapper;
+
+    public TaskModel create(TaskModel taskModel){
+        try{
+            User user = securityCore.getCurrentUser();
+
+            Task task = taskMapper.mapper(taskModel, user);
+
             Task newTask = (Task) taskDataBaseIntegration.save(task);
-            return clearSensitiveDataFromTask(newTask);
-            
+
+            TaskModel model = taskMapper.mapper(newTask);
+
+            log.info("task created successfully - {}", model);
+
+            return model;
+
         }catch(Throwable t){
-            log.error("Error create task: ", t);
+            log.error("Error create taskModel: ", t);
             throw new CustomException(t);
         }
     }
-    
-    public Task find(String id){
+
+    public TaskModel find(String id){
         try{
             UUID uuid = UUID.fromString(id);
-            Optional<Task> task = taskDataBaseIntegration.findById(uuid);
-            
-            if(!task.isPresent()){
-                throw new TaskException("Task not found", HttpStatus.BAD_REQUEST);
+            Optional<Task> opTask = taskDataBaseIntegration.findById(uuid);
+
+            if(!opTask.isPresent()){
+                throw new TaskException("Task not found", HttpStatus.UNPROCESSABLE_ENTITY);
             }
+
+            User user = securityCore.getCurrentUser();
+
+            if(user.getRole().equals(Role.ADMIN)){
+                TaskModel model = taskMapper.mapper(opTask.get());
+                log.info("opTask found successfully - {}", model);
+                
+                return model;
+            }
+
+            if (!opTask.get().getUser().getIdUser().equals(user.getIdUser())){
+                throw new TaskException("Not authorized", HttpStatus.FORBIDDEN);
+            }
+
+            TaskModel model = taskMapper.mapper(opTask.get());
+
+            log.info("opTask found successfully - {}", model);
             
-            return clearSensitiveDataFromTask(task.get());
+            return model;
             
         }catch(Throwable t){
             log.error("Error find task: ", t);
             throw new CustomException(t);
         }
     }
-    
-    public List<Task> list(String status){
-        try{
-            if(Objects.isNull(status)){
-                List<Task> tasks = taskDataBaseIntegration.findAll();
 
-                if(tasks.isEmpty()){
-                    throw new TaskException("No tasks registered", HttpStatus.BAD_REQUEST);
+    public List<TaskModel> list(String status){
+        try{
+            User user = securityCore.getCurrentUser();
+            List<Task> tasks;
+
+            if(Objects.isNull(status)){
+                if(user.getRole().equals(Role.ADMIN)){
+                    tasks = taskDataBaseIntegration.findAll();
+                } 
+                else{
+                    Task taskFilter = new Task();
+                    taskFilter.setUser(user);
+                    Example<Task> ex = Example.of(taskFilter);
+                    tasks = taskDataBaseIntegration.findAll(ex);
                 }
-                
-                Collections.sort(tasks);                        
-                return clearSensitiveDataFromTasks(tasks);
+
+                if(Objects.isNull(tasks) || tasks.isEmpty()){
+                    throw new TaskException("No tasks registered", HttpStatus.UNPROCESSABLE_ENTITY);
+                }
+
+                Collections.sort(tasks);
+                List<TaskModel> models = taskMapper.mapper(tasks);
+
+                log.info("tasks listed successfully -{}", models);
+
+                return models;
             }
-            
+
             Status statusFilter = Status.fromString(status);
             if(Objects.isNull(statusFilter)){
-                throw new TaskException("Status not found", HttpStatus.BAD_REQUEST);
+                throw new TaskException("Status not found", HttpStatus.UNPROCESSABLE_ENTITY);
             }
-            
+
             Task taskFilter = new Task();
             taskFilter.setStatus(statusFilter);
 
-            Example<Task> ex = Example.of(taskFilter);
-            List<Task> tasks = taskDataBaseIntegration.findAll(ex);
+            if(user.getRole().equals(Role.ADMIN)){
+                Example<Task> ex = Example.of(taskFilter);
 
-            if(tasks.isEmpty()){
-                throw new TaskException("No tasks registered with status "+ status.toString(), HttpStatus.BAD_REQUEST);
+                tasks = taskDataBaseIntegration.findAll(ex);
+
+                if(Objects.isNull(tasks) || tasks.isEmpty()){
+                    throw new TaskException("No tasks registered with status ".concat(status.toString()), HttpStatus.BAD_REQUEST);
+                }
+
+                Collections.sort(tasks);
+                List<TaskModel> models = taskMapper.mapper(tasks);
+
+                log.info("tasks listed successfully -{}", models);
+
+                return models;
             }
 
-            return clearSensitiveDataFromTasks(tasks);
+            taskFilter.setUser(user);
+
+            Example<Task> ex = Example.of(taskFilter);
+            tasks = taskDataBaseIntegration.findAll(ex);
+
+            if(Objects.isNull(tasks) || tasks.isEmpty()){
+                throw new TaskException("No tasks registered with status ".concat(status.toString()),
+                        HttpStatus.BAD_REQUEST);
+            }
+
+            List<TaskModel> models = taskMapper.mapper(tasks);
+
+            log.info("tasks listed successfully -{}", models);
+
+            return models;
 
         }catch(Throwable t){
             log.error("Error list tasks by status: {}", t);
             throw new CustomException(t);
         }
     }
-    
-    public List<Task> listByUser(String userId){
+
+    public TaskModel update(String id, TaskModel task){
         try{
-            UUID uuid = UUID.fromString(userId);
-            Optional<User> user = userDataBaseIntegration.findById(uuid);
-            if(!user.isPresent()){
-                throw new TaskException("User not found", HttpStatus.BAD_REQUEST);
-            }
-            
-            Task taskFilter = new Task();
-            taskFilter.setUser(user.get());
-
-            Example<Task> ex = Example.of(taskFilter);
-            List<Task> tasks = taskDataBaseIntegration.findAll(ex);
-
-            if(tasks.isEmpty()){
-                throw new TaskException("No tasks registered by user "+ user.get().getUsername(), HttpStatus.BAD_REQUEST);
-            }
-
-            Collections.sort(tasks);
-            return clearSensitiveDataFromTasks(tasks);
-
-        }catch(Throwable t){
-            log.error("Error list tasks by user: {}", t);
-            throw new CustomException(t);
-        }
-    }
-    
-    public Task update(String id, Task task){
-        try{
+            User user = securityCore.getCurrentUser();
             UUID uuid = UUID.fromString(id);
             Optional<Task> opTask = taskDataBaseIntegration.findById(uuid);
-            
+
             if(!opTask.isPresent()){
                 throw new TaskException("Task not found", HttpStatus.UNPROCESSABLE_ENTITY);
             }
             
+            if(user.getRole().equals(Role.USER) && !opTask.get().getUser().getIdUser().equals(user.getIdUser())){
+                throw new TaskException("Not authorized", HttpStatus.FORBIDDEN);
+            }
+
             Task taskUpdate = opTask.get();
             if(!Objects.isNull(task.getTitle())){
                 taskUpdate.setTitle(task.getTitle());
             }
-            
+
             if(!Objects.isNull(task.getDescription())){
                 taskUpdate.setDescription(task.getDescription());
             }
-            
+
             if(!Objects.isNull(task.getStatus()) && !taskUpdate.getStatus().equals(task.getStatus())){
                 taskUpdate.setStatus(task.getStatus());
                 taskUpdate.setModificationDate(LocalDateTime.now());
             }
             
             taskDataBaseIntegration.save(taskUpdate);
-            return clearSensitiveDataFromTask(taskUpdate);
+
+            TaskModel model = taskMapper.mapper(taskUpdate);
+            log.info("task updated successfully - {}", model);
+
+            return model;
         }
         catch(Throwable t){
             log.error("Error update task: {}", t);
             throw new CustomException(t);
         }
     }
-    
+
     public void delete(final String id){
         try{
-            UUID uuid = UUID.fromString(id);
+            User user = securityCore.getCurrentUser();
+            UUID uuid = UUID.fromString(id);            
+            Optional<Task> opTask = taskDataBaseIntegration.findById(uuid);
+
+            if(!opTask.isPresent()){
+                throw new TaskException("Task not found", HttpStatus.UNPROCESSABLE_ENTITY);
+            }
+
+            if(user.getRole().equals(Role.USER) && !opTask.get().getUser().getIdUser().equals(user.getIdUser())){
+                throw new TaskException("Not authorized", HttpStatus.FORBIDDEN);
+            }
+
             taskDataBaseIntegration.deleteById(uuid);
+            log.info("task deleted successfully");
         }
         catch(Throwable t){
+            log.error("Error delete tasks by id: {}", t);
             throw new CustomException(t);
         }
-    }
-    
-    private Task clearSensitiveDataFromTask(Task task){
-        task.getUser().setPassword(null);
-        
-        return task;
-    }
-    
-    private List<Task> clearSensitiveDataFromTasks(List<Task> tasks){
-        for(Task task : tasks){
-            clearSensitiveDataFromTask(task);
-        }
-        
-        return tasks;
     }
 }

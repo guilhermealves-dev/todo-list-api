@@ -5,8 +5,8 @@
 package dev.guilhermealves.todolistapi.app.ports.out;
 
 import dev.guilhermealves.todolistapi.app.domain.exception.CustomException;
-import dev.guilhermealves.todolistapi.app.domain.model.FieldError;
-import dev.guilhermealves.todolistapi.app.domain.model.TaskError;
+import dev.guilhermealves.todolistapi.app.domain.model.error.FieldError;
+import dev.guilhermealves.todolistapi.app.domain.model.error.TaskError;
 import java.util.List;
 import javax.validation.ConstraintViolationException;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
  *
  * @author Guilherme
  */
+
 public interface ExceptionHandlerPort {
     
     public ResponseEntity<TaskError> customException(CustomException ex);

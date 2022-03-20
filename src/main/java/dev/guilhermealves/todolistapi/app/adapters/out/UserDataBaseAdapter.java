@@ -13,6 +13,7 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +35,7 @@ public class UserDataBaseAdapter implements DataBaseIntegration<User, UUID> {
     }
 
     @Override
+    @Cacheable(value = "user.id", key = "#id", unless="#result == null")
     public Optional<User> findById(UUID id) {
         return repository.findById(id);
     }
@@ -46,6 +48,11 @@ public class UserDataBaseAdapter implements DataBaseIntegration<User, UUID> {
     @Override
     public List<User> findAll(Example<User> example) {
         return repository.findAll(example);
+    }
+
+    @Override
+    public Optional<User> findOne(Example<User> example) {
+        return repository.findOne(example);
     }
 
     @Override

@@ -4,20 +4,19 @@
  */
 package dev.guilhermealves.todolistapi.app.domain.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import dev.guilhermealves.todolistapi.app.domain.enums.Status;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  *
@@ -27,7 +26,6 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-//@JsonIgnoreProperties(value = {"user"})
 public class Task implements Comparable<Task>, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -36,9 +34,13 @@ public class Task implements Comparable<Task>, Serializable {
     @ManyToOne
     @JoinColumn(name="idUser")
     private User user;
-    
+
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime inclusionDate;
-    
+
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime modificationDate;
     
     private String title;

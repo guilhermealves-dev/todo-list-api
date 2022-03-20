@@ -4,7 +4,6 @@
  */
 package dev.guilhermealves.todolistapi.app.domain.exception;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
@@ -14,9 +13,12 @@ import org.springframework.http.HttpStatus;
  */
 
 @Getter
-@AllArgsConstructor
 public class TaskException extends RuntimeException {
-    
-    private final String error;    
-    private final HttpStatus status;
+
+    private HttpStatus status;
+
+    public TaskException(String error, HttpStatus status){
+        super(error);
+        this.status = status;
+    }
 }

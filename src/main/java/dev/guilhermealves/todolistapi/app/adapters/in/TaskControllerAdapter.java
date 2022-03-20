@@ -4,8 +4,8 @@
  */
 package dev.guilhermealves.todolistapi.app.adapters.in;
 
-import dev.guilhermealves.todolistapi.app.domain.entities.Task;
 import dev.guilhermealves.todolistapi.app.domain.core.TaskCore;
+import dev.guilhermealves.todolistapi.app.domain.model.api.TaskModel;
 import dev.guilhermealves.todolistapi.app.ports.in.TaskPort;
 import java.util.List;
 import javax.validation.Valid;
@@ -36,36 +36,29 @@ public class TaskControllerAdapter implements TaskPort {
 
     @Override
     @PostMapping
-    public ResponseEntity<Task> create(@RequestBody @Valid Task task) {
-        Task t = core.create(task);
+    public ResponseEntity<TaskModel> create(@RequestBody @Valid TaskModel task) {
+        TaskModel t = core.create(task);
         return new ResponseEntity<>(t, HttpStatus.CREATED);
     }
 
     @Override
     @GetMapping("/{id}")
-    public ResponseEntity<Task> find(@PathVariable String id) {
-        Task t = core.find(id);
+    public ResponseEntity<TaskModel> find(@PathVariable String id) {
+        TaskModel t = core.find(id);
         return new ResponseEntity<>(t, HttpStatus.OK);
     }
     
     @Override
     @GetMapping
-    public ResponseEntity<List<Task>> list(@RequestParam(required = false) String status) {
-        List<Task> t = core.list(status);
-        return new ResponseEntity<>(t, HttpStatus.OK); 
-    }
-
-    @Override
-    @GetMapping("/user/{id}")
-    public ResponseEntity<List<Task>> listByUser(@PathVariable String id) {
-        List<Task> t = core.listByUser(id);
+    public ResponseEntity<List<TaskModel>> list(@RequestParam(required = false) String status) {
+        List<TaskModel> t = core.list(status);
         return new ResponseEntity<>(t, HttpStatus.OK); 
     }
 
     @Override
     @PatchMapping("/{id}")
-    public ResponseEntity<Task> update(@PathVariable String id, @RequestBody @Valid Task task) {
-        Task t = core.update(id, task);
+    public ResponseEntity<TaskModel> update(@PathVariable String id, @RequestBody @Valid TaskModel task) {
+        TaskModel t = core.update(id, task);
         return new ResponseEntity<>(t, HttpStatus.ACCEPTED);
     }
 

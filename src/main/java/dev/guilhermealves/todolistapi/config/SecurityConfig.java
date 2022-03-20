@@ -18,7 +18,6 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
@@ -60,13 +59,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring()
-            .antMatchers("/h2/**");
+        web.ignoring().antMatchers("/h2/**")
+                .antMatchers("/actuator/**")
+                .antMatchers("/instances/**")
+                .antMatchers("/applications/**")
+                .antMatchers("/wallboard/**")
+                .antMatchers("/assets/**","/sba-settings.js");
     }
     
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        //return NoOpPasswordEncoder.getInstance();
     }
 }

@@ -4,11 +4,10 @@
  */
 package dev.guilhermealves.todolistapi.app.ports.in;
 
-import dev.guilhermealves.todolistapi.app.domain.entities.Task;
-import dev.guilhermealves.todolistapi.app.domain.entities.User;
-import dev.guilhermealves.todolistapi.app.domain.enums.Status;
-import java.util.List;
+import dev.guilhermealves.todolistapi.app.domain.model.api.TaskModel;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 /**
  *
@@ -16,10 +15,9 @@ import org.springframework.http.ResponseEntity;
  */
 
 public interface TaskPort {
-    public ResponseEntity<Task> create(Task task);
-    public ResponseEntity<Task> find(String id);
-    public ResponseEntity<List<Task>> list(String status);
-    public ResponseEntity<List<Task>> listByUser(String userId);
-    public ResponseEntity<Task> update(String id, Task task);
+    public ResponseEntity<TaskModel> create(TaskModel TaskModel);
+    public ResponseEntity<TaskModel> find(String id);
+    public ResponseEntity<List<TaskModel>> list(String status);
+    public ResponseEntity<TaskModel> update(String id, TaskModel TaskModel);
     public ResponseEntity<?> delete(String id);
 }

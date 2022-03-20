@@ -19,5 +19,6 @@ public interface DataBaseIntegration<T, ID> {
     public Optional<T> findById(ID id);
     public List<T> findAll();
     public List<T> findAll(Example<T> example);
+    public Optional<T> findOne(Example<T> example);
     public void deleteById(ID id);
 }

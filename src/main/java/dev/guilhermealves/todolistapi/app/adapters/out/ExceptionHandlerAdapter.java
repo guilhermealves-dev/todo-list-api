@@ -6,8 +6,8 @@ package dev.guilhermealves.todolistapi.app.adapters.out;
 
 import dev.guilhermealves.todolistapi.app.domain.exception.CustomException;
 import dev.guilhermealves.todolistapi.app.domain.exception.TaskException;
-import dev.guilhermealves.todolistapi.app.domain.model.FieldError;
-import dev.guilhermealves.todolistapi.app.domain.model.TaskError;
+import dev.guilhermealves.todolistapi.app.domain.model.error.FieldError;
+import dev.guilhermealves.todolistapi.app.domain.model.error.TaskError;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -40,7 +40,7 @@ public class ExceptionHandlerAdapter extends ResponseEntityExceptionHandler {
         if(ExceptionUtils.getRootCause(t) instanceof TaskException){
             TaskException te = (TaskException) ExceptionUtils.getRootCause(t);
             
-            taskError.setMessage(te.getError());
+            taskError.setMessage(te.getMessage());
             taskError.setStatus(te.getStatus().value());
             
             return new ResponseEntity<>(taskError, te.getStatus()); 
@@ -53,7 +53,7 @@ public class ExceptionHandlerAdapter extends ResponseEntityExceptionHandler {
     }
     
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<List<FieldError>> camposException(ConstraintViolationException ex) {
+    public ResponseEntity<List<FieldError>> fieldsException(ConstraintViolationException ex) {
         List<FieldError> errors = new ArrayList<>();
         
         ex.getConstraintViolations().parallelStream().forEach(constraintViolation->{

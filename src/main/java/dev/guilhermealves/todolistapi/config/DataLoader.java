@@ -45,24 +45,24 @@ public class DataLoader {
     private void createUsersTest(){
 
         User user1 = new User();
+        user1.setIdUser(UUID.fromString("f4eff9cf-e496-427c-9629-bd35edaa2190"));
         user1.setUsername("guilherme");
         user1.setPassword(passwordEncoder.encode("123"));
         user1.setRole(Role.USER);
-        user1.setIdUser(UUID.fromString("f4eff9cf-e496-427c-9629-bd35edaa2190"));
         dataBaseIntegration.save(user1);
 
         User user2 = new User();
+        user2.setIdUser(UUID.fromString("bac239f8-4d1a-4f00-b737-36451de7cc84"));
         user2.setUsername("telma");
         user2.setPassword(passwordEncoder.encode("123"));
         user2.setRole(Role.ADMIN);
-        user2.setIdUser(UUID.fromString("bac239f8-4d1a-4f00-b737-36451de7cc84"));
         dataBaseIntegration.save(user2);
 
         User user3 = new User();
+        user3.setIdUser(UUID.fromString("203b6558-ed6e-4360-965f-418264abc58f"));
         user3.setUsername("gabriel");
         user3.setPassword(passwordEncoder.encode("123"));
         user3.setRole(Role.ADMIN);
-        user3.setIdUser(UUID.fromString("203b6558-ed6e-4360-965f-418264abc58f"));
         dataBaseIntegration.save(user3); 
     }
     
