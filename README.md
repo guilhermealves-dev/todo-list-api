@@ -405,6 +405,8 @@ Como trabalhos futuros para esta aplicação podemos ter a implementação dos s
 
 - Criar cadastros de usuários dinâmicamente via API
 
+- Fazer paginação de conteúdo nas listagens
+
 - Integração com um banco de dados MySQL ou MongoDB
 
 - Criar estratégia de deployment na Cloud da AWS
