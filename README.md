@@ -23,7 +23,6 @@ Nesta API é possível gerenciar tarefas (TODO-LIST)
 
 - Todas as ações realizadas dentro da API são autenticadas utilizando um `access_token` que tem validade de 5 minutos
 - O projeto foi construído utilizando a arquitetura **Hexagonal (Ports and Adapters)**
-- A persistência de dados é realizada em um banco de dados relacional H2 (podemos acessar seu painel através deste link [http://localhost:8080/h2/](http://localhost:8080/h2/)), por conta de facilitar o deploy em um ambiente de testes, evitando assim a necessidade de criar uma *"database"* e *"user"* específico para poder rodar a aplicação. Entretanto vale destacar que por conta do baixo acoplamento na arquitetura deste projeto, fácilmente podemos fazer a integração dele com um banco de dados, como por exemplo `MySQL` ou `MariaDB`
 - A fim de reduzir a sobrecarga e acesso constante ao banco de dados, a API se conecta ao `REDIS` para armazenar cache
 - Foi configurado o `Actuator` para fornecer informações de `healthcheck` da aplicação
 - Para os indicadores de performance da API foi configurado o `Spring Admin` que em conjunto com o `Actuator` conseguem fornecer essas métricas
@@ -39,7 +38,6 @@ Nesta API é possível gerenciar tarefas (TODO-LIST)
 | `maria`| `123`     | `ADMIN`   |
 | `pedro`| `123`     | `USER`   |
 | `guilherme`| `123`     | `USER`   |
-
 
 ## Requisitos para instalação
 
@@ -72,6 +70,15 @@ docker run -it --name redis -p 6379:6379 redis:5.0.3
 ```
 
 4) Por fim, execute a aplicação que ficará disponivel em seu [http://localhost:8080/](http://localhost:8080/)
+## Banco de dados
+
+A persistência de dados é realizada em um banco de dados relacional `H2`, por conta de facilitar o deploy em um ambiente de testes, evitando assim a necessidade de criar uma "database" e "user" específico para poder rodar a aplicação. Entretanto vale destacar que por conta do baixo acoplamento na arquitetura deste projeto, fácilmente podemos fazer a integração dele com um banco de dados, como por exemplo MySQL ou MariaDB
+
+Após feito a instalação e iniciar a aplicação, podemos acessar o painel do `H2 database` através deste link http://localhost:8080/h2/
+
+#### MER - Modelo de entidade de relacionamento da aplicação
+
+![MER](https://a.imagem.app/AwxRly.png)
 ## Testes
 - Após realizado a instalação, para verificar a cobertura de testes abra o HTML localizado no seguinte diretório
     ```path
