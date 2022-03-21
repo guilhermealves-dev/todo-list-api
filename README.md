@@ -29,7 +29,7 @@ Nesta API é possível gerenciar tarefas (TODO-LIST)
 - Para os indicadores de performance da API foi configurado o `Spring Admin` que em conjunto com o `Actuator` conseguem fornecer essas métricas
 - Para exibir logs/trace do que esta acontecendo na API foi utilizado o `Slf4j`
 - Para a realização dos testes unitários foi utilizado o `JUnit`
-- Utilizando o `JaCOCO` podemos visualizar que os testes unitários cobriram **86%** dos códigos na aplicação
+- Utilizando o `JaCOCO` podemos visualizar que os testes unitários cobriram **86%** dos códigos na aplicação ![test coverage](https://img.shields.io/badge/coverage-86%25-brightgreen)
 - Não é possível cadastrar usuários via API, eles são gerados estaticamente na classe `DataLoader`, juntamente com algumas Tasks de teste
 
 #### Usuários de teste disponíveis
@@ -401,7 +401,6 @@ Como trabalhos futuros para esta aplicação podemos ter a implementação dos s
 - Integração com um banco de dados MySQL ou MongoDB
 
 - Criar estratégia de deployment na Cloud da AWS
-
 ## Licença
 
 [![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://opensource.org/licenses/MIT) 
@@ -409,3 +408,8 @@ Como trabalhos futuros para esta aplicação podemos ter a implementação dos s
 [![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/GPL-3.0)
 
 [![AGPL License](https://img.shields.io/badge/license-AGPL-blue.svg)](http://www.gnu.org/licenses/agpl-3.0)
+## 🔗 Links
+
+| [![website](https://www.guilhermealves.dev/assets/images/mini-logo.png?)](https://www.guilhermealves.dev/) | [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/)     |
+| :----------- | :---------- |
+
