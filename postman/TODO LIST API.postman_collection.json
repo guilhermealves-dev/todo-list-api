@@ -1,0 +1,311 @@
+{
+	"info": {
+		"_postman_id": "a402b395-70a6-4b8d-8a8e-aa7e383689bc",
+		"name": "TODO LIST API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "New Task",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "bf06b1b5-2fe2-4075-b37a-939007a16f86",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{    \r\n    \"title\": \"Comprar um novo computador\",\r\n    \"description\": \"Comprar um novo computador\",\r\n    \"status\": 1  \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/v1/tasks",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"v1",
+						"tasks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Task 2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "9f9abe75-e59a-403e-88d0-030305fd5b40",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"user\": {\r\n        \"idUser\": \"f4eff9cf-e496-427c-9629-bd35edaa2190\"\r\n    },\r\n    \"title\": \"Comprar frutas\",\r\n    \"description\": \"Comprar frutas na feira para a dieta\",\r\n    \"status\": 0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/v1/tasks",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"v1",
+						"tasks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Task",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "cf832a1d-8c0a-4f64-886b-d8d1f5b4f9ed",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{    \r\n    \"title\": \"enviar o case tecnico\",\r\n    \"description\": \"fazer commit e enviar email\",\r\n    \"status\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/v1/tasks/9a9e80d0-36fc-4eb0-849c-7deb0a3c3109",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"v1",
+						"tasks",
+						"9a9e80d0-36fc-4eb0-849c-7deb0a3c3109"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List all tasks - filter by status",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "9f9abe75-e59a-403e-88d0-030305fd5b40",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/v1/tasks?status=completed",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"v1",
+						"tasks"
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": "completed"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List all tasks",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "9f9abe75-e59a-403e-88d0-030305fd5b40",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/v1/tasks",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"v1",
+						"tasks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get task by ID",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "9f9abe75-e59a-403e-88d0-030305fd5b40",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/v1/tasks/4afa141f-76c4-4eb6-b654-f248fd6ed88e",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"v1",
+						"tasks",
+						"4afa141f-76c4-4eb6-b654-f248fd6ed88e"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "oAuth Token",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "123",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "client",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "default"
+						},
+						{
+							"key": "username",
+							"value": "guilherme",
+							"type": "default"
+						},
+						{
+							"key": "password",
+							"value": "123",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{host}}/oauth/token",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"oauth",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Actuator",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/actuator",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"actuator"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Task",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "92d2dd27-0d0b-40a3-a70a-698440cd2b3d",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/v1/tasks/9a9e80d0-36fc-4eb0-849c-7deb0a3c3109",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"v1",
+						"tasks",
+						"9a9e80d0-36fc-4eb0-849c-7deb0a3c3109"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
