@@ -53,16 +53,16 @@ public class DataLoader {
 
         User user2 = new User();
         user2.setIdUser(UUID.fromString("bac239f8-4d1a-4f00-b737-36451de7cc84"));
-        user2.setUsername("telma");
+        user2.setUsername("maria");
         user2.setPassword(passwordEncoder.encode("123"));
         user2.setRole(Role.ADMIN);
         dataBaseIntegration.save(user2);
 
         User user3 = new User();
         user3.setIdUser(UUID.fromString("203b6558-ed6e-4360-965f-418264abc58f"));
-        user3.setUsername("gabriel");
+        user3.setUsername("pedro");
         user3.setPassword(passwordEncoder.encode("123"));
-        user3.setRole(Role.ADMIN);
+        user3.setRole(Role.USER);
         dataBaseIntegration.save(user3); 
     }
     

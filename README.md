@@ -11,6 +11,10 @@ Nesta API é possível gerenciar tarefas (TODO-LIST)
 - Listar tarefas
     - Filtrar tarefas com o Status `PENDING` ou `COMPLETED`
     - Ao listar todas as tarefas sem uma filtragem de Status definida, é retornado a lista de tarefas ordenando as com Status `PENDING` primeiro
+- Atualizar tarefa
+    - Ao atualizar o Status de uma tarefa seu atributo `modificationDate` é setado
+- Pesquisar tarefa pelo ID
+- Deletar tarefa pelo ID
 - Tarefas criadas por um usuário não pode ser vista por outros usuários
 - Usuários com perfil de `ADMIN` podem listar, editar, ou apagar as tarefas de qualquer usuário
 
@@ -19,13 +23,24 @@ Nesta API é possível gerenciar tarefas (TODO-LIST)
 
 - Todas as ações realizadas dentro da API são autenticadas utilizando um `access_token` que tem validade de 5 minutos
 - O projeto foi construído utilizando a arquitetura **Hexagonal (Ports and Adapters)**
-- A persistência de dados é realizada em um banco de dados relacional H2 do Java
+- A persistência de dados é realizada em um banco de dados relacional H2 (podemos acessar seu painel através deste link [http://localhost:8080/h2/](http://localhost:8080/h2/)), por conta de facilitar o deploy em um ambiente de testes, evitando assim a necessidade de criar uma *"database"* e *"user"* específico para poder rodar a aplicação. Entretanto vale destacar que por conta do baixo acoplamento na arquitetura deste projeto, fácilmente podemos fazer a integração dele com um banco de dados, como por exemplo `MySQL` ou `MariaDB`
 - A fim de reduzir a sobrecarga e acesso constante ao banco de dados, a API se conecta ao `REDIS` para armazenar cache
 - Foi configurado o `Actuator` para fornecer informações de `healthcheck` da aplicação
 - Para os indicadores de performance da API foi configurado o `Spring Admin` que em conjunto com o `Actuator` conseguem fornecer essas métricas
 - Para exibir logs/trace do que esta acontecendo na API foi utilizado o `Slf4j`
 - Para a realização dos testes unitários foi utilizado o `JUnit`
 - Utilizando o `JaCOCO` podemos visualizar que os testes unitários cobriram **86%** dos códigos na aplicação
+- Não é possível cadastrar usuários via API, eles são gerados estaticamente na classe `DataLoader`, juntamente com algumas Tasks de teste
+
+#### Usuários de teste disponíveis
+
+| Username   | Password  | Role                           |
+| :--------- | :----     | :------|
+| `maria`| `123`     | `ADMIN`   |
+| `pedro`| `123`     | `USER`   |
+| `guilherme`| `123`     | `USER`   |
+
+
 ## Requisitos para instalação
 
 - GIT - [Download](https://git-scm.com/downloads)
@@ -66,10 +81,69 @@ docker run -it --name redis -p 6379:6379 redis:5.0.3
      ```path
     .../todo-list-api/jMeter/Test Plan.jmx
     ```
-- Também foi disponibilizado os arquivos da Collection caso prefira rodar os testes no **POSTMAN**
+- Também foi disponibilizado os arquivos da Collection e variáveis de ambiente caso prefira rodar os testes no **POSTMAN**
      ```path
     .../todo-list-api/postman/*
     ```
+
+### CURL para testes
+
+- Autenticação
+```shell
+curl --location --request POST 'http://localhost:8080/oauth/token' \
+--header 'Authorization: Basic Y2xpZW50OjEyMw==' \
+--form 'grant_type="password"' \
+--form 'username="guilherme"' \
+--form 'password="123"'
+```
+
+- Cadastrar Task
+```shell
+curl --location --request POST 'http://localhost:8080/v1/tasks' \
+--header 'Authorization: Bearer f59dc76c-ee57-4305-883a-9e945a45d392' \
+--header 'Content-Type: application/json' \
+--data-raw '{    
+    "title": "Comprar um novo computador",
+    "description": "Comprar um novo computador",
+    "status": 1  
+}'
+```
+
+- Pesquisar Task por ID
+```shell
+curl --location --request GET 'http://localhost:8080/v1/tasks/4afa141f-76c4-4eb6-b654-f248fd6ed88e' \
+--header 'Authorization: Bearer ad301282-5191-4009-b179-5613f22a71c7'
+```
+
+- Listar todas as Tasks
+```shell
+curl --location --request GET 'http://localhost:8080/v1/tasks' \
+--header 'Authorization: Bearer ad301282-5191-4009-b179-5613f22a71c7'
+```
+
+- Listar todas as Tasks filtrando pelo Status
+```shell
+curl --location --request GET 'http://localhost:8080/v1/tasks?status=completed' \
+--header 'Authorization: Bearer ad301282-5191-4009-b179-5613f22a71c7'
+```
+
+- Atualizar Task
+```shell
+curl --location --request PATCH 'http://localhost:8080/v1/tasks/9a9e80d0-36fc-4eb0-849c-7deb0a3c3109' \
+--header 'Authorization: Bearer ad301282-5191-4009-b179-5613f22a71c7' \
+--header 'Content-Type: application/json' \
+--data-raw '{    
+    "title": "Abastecer o carro",
+    "description": "lembrar de abastecer o carro",
+    "status": 1
+}'
+```
+
+- Deletar Task
+```shell
+curl --location --request DELETE 'http://localhost:8080/v1/tasks/1140d0ac-b06c-46a2-bdb6-7a6cd083ee29' \
+--header 'Authorization: Bearer ad301282-5191-4009-b179-5613f22a71c7'
+```
 ## Indicadores da API
 - Actuator
 ```http
@@ -258,7 +332,7 @@ docker run -it --name redis -p 6379:6379 redis:5.0.3
 ]
 ```
 
-#### Atualizar tarefa
+#### Atualizar Task
 
 ```http
   PATCH /v1/tasks/{$idTask}
@@ -297,7 +371,7 @@ docker run -it --name redis -p 6379:6379 redis:5.0.3
 }
 ```
 
-#### Deletar tarefa
+#### Deletar Task
 
 ```http
   DELETE /v1/tasks/{$idTask}
@@ -317,3 +391,21 @@ docker run -it --name redis -p 6379:6379 redis:5.0.3
 ```http
   STATUS: 202 Accepted
 ```
+## Roadmap
+Como trabalhos futuros para esta aplicação podemos ter a implementação dos seguintes itens destacados abaixo
+
+- Implementação de testes automatizados
+
+- Criar cadastros de usuários dinâmicamente via API
+
+- Integração com um banco de dados MySQL ou MongoDB
+
+- Criar estratégia de deployment na Cloud da AWS
+
+## Licença
+
+[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://opensource.org/licenses/MIT) 
+
+[![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/GPL-3.0)
+
+[![AGPL License](https://img.shields.io/badge/license-AGPL-blue.svg)](http://www.gnu.org/licenses/agpl-3.0)
