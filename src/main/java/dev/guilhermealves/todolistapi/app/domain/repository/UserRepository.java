@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
- */
 package dev.guilhermealves.todolistapi.app.domain.repository;
 
 import dev.guilhermealves.todolistapi.app.domain.entities.User;
