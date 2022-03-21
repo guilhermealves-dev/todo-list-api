@@ -32,6 +32,8 @@ Nesta API é possível gerenciar tarefas (TODO-LIST)
 - Maven - [Download](https://maven.apache.org/download.cgi)
 - Docker - [Download](https://docs.docker.com/desktop/#download-and-install)
 - Java JDK versão `11.0.14` ou superior - [Download](https://www.oracle.com/java/technologies/downloads/#java11)
+- JMeter - [Download](https://jmeter.apache.org/download_jmeter.cgi)
+- POSTMAN - [Download](https://www.postman.com/downloads/)
 - IDE de sua preferência: [NetBeans](https://netbeans.apache.org/download/nb126/nb126.html), [Eclipse](https://www.eclipse.org/downloads/), [Intellij](https://www.jetbrains.com/pt-br/idea/download/)
 ## Instalação
 
