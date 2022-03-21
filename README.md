@@ -411,6 +411,6 @@ Como trabalhos futuros para esta aplicação podemos ter a implementação dos s
 
 ## 🔗 Autor
 
-| [![website](https://www.guilhermealves.dev/assets/images/mini-logo.png?)](https://www.guilhermealves.dev/) | [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/)     |
+| [![website](https://www.guilhermealves.dev/assets/images/mini-logo.png)](https://www.guilhermealves.dev/) | [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/)     |
 | :----------- | :---------- |
 
