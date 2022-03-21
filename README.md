@@ -78,7 +78,7 @@ Após feito a instalação e iniciar a aplicação, podemos acessar o painel do 
 
 #### MER - Modelo de entidade de relacionamento da aplicação
 
-![MER](https://a.imagem.app/AwxRly.png)
+![MER](https://a.imagem.app/AwxZMr.png)
 ## Testes
 - Após realizado a instalação, para verificar a cobertura de testes abra o HTML localizado no seguinte diretório
     ```path
@@ -415,7 +415,6 @@ Como trabalhos futuros para esta aplicação podemos ter a implementação dos s
 [![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/GPL-3.0)
 
 [![AGPL License](https://img.shields.io/badge/license-AGPL-blue.svg)](http://www.gnu.org/licenses/agpl-3.0)
-
 ## 🔗 Autor
 
 | [![website](https://www.guilhermealves.dev/assets/images/mini-logo.png)](https://www.guilhermealves.dev/) | [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/)     |
