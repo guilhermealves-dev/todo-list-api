@@ -408,7 +408,8 @@ Como trabalhos futuros para esta aplicação podemos ter a implementação dos s
 [![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/GPL-3.0)
 
 [![AGPL License](https://img.shields.io/badge/license-AGPL-blue.svg)](http://www.gnu.org/licenses/agpl-3.0)
-## 🔗 Links
+
+## 🔗 Autor
 
 | [![website](https://www.guilhermealves.dev/assets/images/mini-logo.png?)](https://www.guilhermealves.dev/) | [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/)     |
 | :----------- | :---------- |
