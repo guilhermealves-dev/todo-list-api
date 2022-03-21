@@ -84,17 +84,17 @@ docker run -it --name redis -p 6379:6379 redis:5.0.3
   POST /oauth/token
 ```
 - Authorization da requisição
-| Parâmetro   | Valor       | Descrição                           |
-| :---------- | :--------- | :---------------------------------- |
-| `client` | `client` | **Obrigatório**. Nome do cliente da API |
-| `password` | `123` | **Obrigatório**. Senha do cliente da API |
+| Parâmetro   | Valor    | Descrição                                |
+| :---------- | :--------| :--------------------------------------- |
+| `client`    | `client` | **Obrigatório**. Nome do cliente da API  |
+| `password`  | `123`    | **Obrigatório**. Senha do cliente da API |
 
 - Body da requisição - JSON contendo os parâmetros abaixo
-| Parâmetro   | Valor       | Descrição                           |
-| :---------- | :--------- | :---------------------------------- |
-| `grant_type` | `password` | **Obrigatório**. Valor fixo |
-| `username` | `guilherme` | **Obrigatório**. Nome de usuário |
-| `password` | `123` | **Obrigatório**. Senha do usuário |
+| Parâmetro    | Valor       | Descrição                           |
+| :----------- | :---------- | :---------------------------------- |
+| `grant_type` | `password`  | **Obrigatório**. Valor fixo         |
+| `username`   | `guilherme` | **Obrigatório**. Nome de usuário    |
+| `password`   | `123`       | **Obrigatório**. Senha do usuário   |
 
 - Exemplo de resposta
 ```json
