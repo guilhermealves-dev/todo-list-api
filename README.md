@@ -412,7 +412,7 @@ Como trabalhos futuros para esta aplicação podemos ter a implementação dos s
 - Criar estratégia de deployment na Cloud da AWS
 ## Licença
 
-[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://opensource.org/licenses/MIT) 
+[![MIT License](https://img.shields.io/badge/license-MIT-green)](https://opensource.org/licenses/MIT) 
 
 [![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/GPL-3.0)
 
